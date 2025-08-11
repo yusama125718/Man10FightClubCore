@@ -1,5 +1,6 @@
 package yusama125718.man10FightClubCore;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -78,7 +79,7 @@ public class ScoreBoardManager implements Listener {
         if (!show_worlds.contains(world.getName())) return;
         show_worlds.remove(world.getName());
         for (Player p : world.getPlayers()){
-            if (p.getScoreboard() != board) continue;
+            if (p.getScoreboard() != board || show_players.contains(p.getName())) continue;
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
         }
     }
@@ -96,6 +97,25 @@ public class ScoreBoardManager implements Listener {
         for (Player p : Bukkit.getOnlinePlayers()){
             if (p.getScoreboard() != board) continue;
             p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
+        }
+    }
+
+    public void BroadCast(String message){
+        if (show_all) {
+            Bukkit.broadcast(Component.text(message));
+            return;
+        }
+        for (String s : show_players){
+            Player p = Bukkit.getPlayer(s);
+            if (p != null) p.sendMessage(Component.text(message));
+        }
+        for (String s : show_worlds){
+            World w = Bukkit.getWorld(s);
+            if (w == null) continue;
+            for (Player p : w.getPlayers()){
+                if (show_players.contains(p.getName())) continue;
+                p.sendMessage(Component.text(message));
+            }
         }
     }
 

@@ -15,7 +15,7 @@ import java.util.*;
 import static yusama125718.man10FightClubCore.Man10FightClubCore.mfc_core;
 import static yusama125718.man10FightClubCore.Man10FightClubCore.vaultapi;
 
-public class Stanby {
+public class Standby {
     // システム名
     private String sys_name;
     // 表示名
@@ -36,7 +36,7 @@ public class Stanby {
     public boolean isEntry = false;
 
     // 初期化・募集開始処理
-    public Stanby(String SysName, String DisplayName, String BossBarTitle, int Price){
+    public Standby(String SysName, String DisplayName, String BossBarTitle, int Price){
         sys_name = SysName;
         display_name = DisplayName;
         chat_prefix = DisplayName + "§r";
@@ -48,14 +48,12 @@ public class Stanby {
     }
 
     // 受付開始処理
-    public void StartStandby(){
+    public void StartStandby(int wait_time){
         isEntry = true;
-        boss_bar.StartCountDown(30, () -> {
-            // 終了処理
-            boss_bar.RemoveAll();
-            score_board.RemoveAll();
-            // イベントを発火
-            Bukkit.getPluginManager().callEvent(new MFCStanbyEndEvent(players, this));
+        boss_bar.StartCountDown(wait_time, () -> {
+            Standby standby = this;
+            // １秒後にイベントを発火
+            Bukkit.getScheduler().runTaskLater(mfc_core, () -> Bukkit.getPluginManager().callEvent(new Standby.MFCStandbyEndEvent(players, standby, sys_name)), 20L);
         });
     }
 
@@ -67,6 +65,22 @@ public class Stanby {
     // chat_prefix修正
     public void setChatPrefix(String s){
         chat_prefix = s + "§r";
+    }
+
+    public void setDisplay_name(String s){
+        display_name = s;
+    }
+
+    public String getSystemName(){
+        return sys_name;
+    }
+
+    public String getDisplayName(){
+        return display_name;
+    }
+
+    public String getChatPrefix(){
+        return chat_prefix;
     }
 
     // エントリー処理
@@ -85,7 +99,7 @@ public class Stanby {
         }
         Thread th = new Thread(() -> {
             MySQLManager mysql = new MySQLManager(mfc_core, "man10_mfc_core");
-            if (!mysql.execute("INSERT INTO money_log (time, system_name, mcid, uuid, pay_amount, out_amount, note) VALUES ('" + LocalDateTime.now() + "', '" + sys_name + "', '" + p.getName() + "', '" + p.getUniqueId() + "', " + price + ", 0, 'Entry')")){
+            if (!mysql.execute("INSERT INTO money_log (time, system_name, mcid, uuid, pay_amount, out_amount, note) VALUES ('" + LocalDateTime.now() + "', '" + sys_name + "', '" + p.getName() + "', '" + p.getUniqueId() + "', " + price + ", 0, 'Action:Entry')")){
                 p.sendMessage(Component.text(chat_prefix + "§cDBの保存に失敗しました"));
                 return;
             }
@@ -93,7 +107,7 @@ public class Stanby {
                 p.sendMessage(Component.text(chat_prefix + "§c出金に失敗しました"));
                 return;
             }
-            // インベントリはメインスレッドでいじる
+            // マップはメインスレッドでいじる
             Bukkit.getScheduler().runTask(mfc_core, () -> {
                 players.put(p.getName(), p.getUniqueId());
                 p.sendMessage(Component.text(chat_prefix + "§e参加登録をしました"));
@@ -117,7 +131,7 @@ public class Stanby {
                 p.sendMessage(Component.text(chat_prefix + "§c入金に失敗しました"));
                 return;
             }
-            // 配列はメインスレッドでいじる
+            // マップはメインスレッドでいじる
             Bukkit.getScheduler().runTask(mfc_core, () -> {
                 players.remove(p.getName());
                 p.sendMessage(Component.text(chat_prefix + "§e参加登録を取り消しました"));
@@ -142,23 +156,29 @@ public class Stanby {
     }
 
     // エントリー締め切りイベント
-    public static class MFCStanbyEndEvent extends Event {
+    public static class MFCStandbyEndEvent extends Event {
 
         private static final HandlerList HANDLERS = new HandlerList();
         private final Map<String, UUID> players;
-        private Stanby st;
+        private Standby st;
+        private String sys_name;
 
-        public MFCStanbyEndEvent(Map<String, UUID> ps, Stanby st) {
+        public MFCStandbyEndEvent(Map<String, UUID> ps, Standby st, String sys_name) {
             this.players = ps;
             this.st = st;
+            this.sys_name = sys_name;
         }
 
         public Map<String, UUID> getPlayers() {
             return players;
         }
 
-        public Stanby getStanby(){
+        public Standby getStanby(){
             return st;
+        }
+
+        public String getSystemName() {
+            return sys_name;
         }
 
         @Override

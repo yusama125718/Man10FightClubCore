@@ -24,3 +24,11 @@ new BossBarManager(String BarTitle, BarColor Color, double Progress, BarStyle St
 ### void ShowAll()
 全てのプレイヤーにボスバーを表示するようにします。
 
+### void HideToWorld(World world)
+ボスバーを表示に設定しているワールドから引数で指定したワールドを除外します
+
+### public void HideToPlayer(Player p)
+ボスバーを表示に設定しているプレイヤーから引数で指定したプレイヤーを除外します
+
+### void RemoveAll()
+全てのプレイヤーから非表示にします

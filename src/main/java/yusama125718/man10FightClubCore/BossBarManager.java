@@ -61,6 +61,7 @@ public class BossBarManager implements Listener {
         if (!show_worlds.contains(world.getName())) return;
         show_worlds.remove(world.getName());
         for (Player p : world.getPlayers()){
+            if (show_players.contains(p.getName())) continue;
             boss_bar.removePlayer(p);
         }
     }
