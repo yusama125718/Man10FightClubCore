@@ -111,8 +111,6 @@ public class Bet {
         return chat_prefix;
     }
 
-    public Map<UUID, Map<UUID, Double>>
-
     public void PlayerBet(Player p, double price, UUID target){
         if (!isBet){
             p.sendMessage(Component.text(chat_prefix + "§c現在はベットできません"));

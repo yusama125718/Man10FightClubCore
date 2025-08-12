@@ -15,7 +15,7 @@ Man10FightClub（MFC）のコアシステムです。\
 ゲームの流れで発生するお金のやり取りは全てCore側で完結するように作成しているのでログの保存などを機にする必要はありません。\
 DBが無いとログを保存できず処理が進まないので必ず作成してください。\
 開発環境ではMySQLで動作確認を実施しています。サーバーではconfig.ymlの以下の値を確認・修正してください。
-```access transformers
+```yaml
 mysql:
   host: <db接続先>
   port: '<dbポート番号>'
@@ -24,6 +24,19 @@ mysql:
   db: <db名>
 ```
 <db名>で指定したdbは自動では作成されないので手動で作成してください。
+
+## 導入方法
+mavenの場合はdependencies配下に以下を記述します
+```xml
+<dependency>
+    <groupId>yusama125718</groupId>
+    <artifactId>Man10FightClubCore</artifactId>
+    <version>1.0</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/Man10FightClubCore.jar</systemPath>
+</dependency>
+```
+
 
 ## 使用方法
 各機能の使用方法はdocuments配下にクラスごとに書いてあります。
