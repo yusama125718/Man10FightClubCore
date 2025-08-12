@@ -1,34 +1,56 @@
 # BossBarManager
-ボスバーの管理を楽にするための機能です。
+
+ボスバーの表示を管理するクラスです。
 
 ## インスタンス作成
-以下のようにインスタンスを作成できます
-```access transformers
-new BossBarManager(String BarTitle, BarColor Color, double Progress, BarStyle Style)
+```java
+new BossBarManager(String barTitle, BarColor color, double progress, BarStyle style)
+new BossBarManager()
 ```
-* **BarTitle** : ボスバーの上部に表示される名前を設定します（%time%を挿入することでカウントダウンの残り時間を設定可能）
-* **Color** : ボスバーの色を指定します
-* **Progress** : ボスバーの充填率を設定します（0〜1）
-* **Style** : ボスバーの見た目を指定します
+* **barTitle** : ボスバーの上部に表示されるタイトル（`%time%` を含めると残り時間に置き換わります）
+* **color** : ボスバーの色
+* **progress** : 初期の充填率（0〜1）
+* **style** : ボスバーのスタイル
 
-## クラスメソッド
-以下のメソッドが使用可能です
+## 公開変数
+このクラスにpublic変数はありません。
 
+## 公開メソッド
 ### void ShowToWorld(World world)
-引数で指定したワールドにいるプレイヤーにボスバーを表示します。\
-追加したワールドから離れると自動で非表示にします。
+指定ワールドにいるプレイヤーにボスバーを表示します。プレイヤーがそのワールドを離れると自動的に非表示になります。
 
 ### void ShowToPlayer(Player p)
-引数で指定したプレイヤーにボスバーを表示するようにします。
+指定プレイヤーにボスバーを表示します。
 
 ### void ShowAll()
-全てのプレイヤーにボスバーを表示するようにします。
+全てのプレイヤーにボスバーを表示します。
 
 ### void HideToWorld(World world)
-ボスバーを表示に設定しているワールドから引数で指定したワールドを除外します
+指定ワールドのプレイヤーからボスバーを非表示にします。
 
-### public void HideToPlayer(Player p)
-ボスバーを表示に設定しているプレイヤーから引数で指定したプレイヤーを除外します
+### void HideToPlayer(Player p)
+指定プレイヤーからボスバーを非表示にします。
 
 ### void RemoveAll()
-全てのプレイヤーから非表示にします
+全てのプレイヤーからボスバーを取り除きます。
+
+### void ChangeColor(BarColor color)
+ボスバーの色を変更します。
+
+### void ChangeStyle(BarStyle style)
+ボスバーのスタイルを変更します。
+
+### void ChangeTitle(String title)
+ボスバーのタイトルを変更します。
+
+### void ChangeProgress(Double progress)
+ボスバーの充填率を変更します。
+
+### void StartCountDown(int second, Runnable complete)
+カウントダウンを開始し、完了時に `complete` を実行します。
+
+### void EndTimer()
+進行中のカウントダウンを停止します。
+
+## カスタムイベント
+このクラスにカスタムイベントはありません。
