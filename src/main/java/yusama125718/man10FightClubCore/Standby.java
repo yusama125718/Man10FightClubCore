@@ -50,10 +50,15 @@ public class Standby {
     // 受付開始処理
     public void StartStandby(int wait_time){
         isEntry = true;
+        score_board.SetContent("§c§l==参加者募集中==", 0);
+        score_board.SetContent("0人登録中", 1);
         boss_bar.StartCountDown(wait_time, () -> {
             Standby standby = this;
             // １秒後にイベントを発火
-            Bukkit.getScheduler().runTaskLater(mfc_core, () -> Bukkit.getPluginManager().callEvent(new Standby.MFCStandbyEndEvent(players, standby, sys_name)), 20L);
+            Bukkit.getScheduler().runTaskLater(mfc_core, () -> {
+                Bukkit.getPluginManager().callEvent(new Standby.MFCStandbyEndEvent(players, standby, sys_name));
+                score_board.RemoveAll();
+            }, 20L);
         });
     }
 
@@ -110,6 +115,7 @@ public class Standby {
             // マップはメインスレッドでいじる
             Bukkit.getScheduler().runTask(mfc_core, () -> {
                 players.put(p.getName(), p.getUniqueId());
+                score_board.SetContent(players.size() + "人登録中", 1);
                 p.sendMessage(Component.text(chat_prefix + "§e参加登録をしました"));
             });
         });
