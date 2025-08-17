@@ -161,6 +161,11 @@ public class Standby {
         th.start();
     }
 
+    // キャンセル処理（返金なし）
+    public void RemovePlayer(String mcid){
+        players.remove(mcid);
+    }
+
     // エントリー締め切りイベント
     public static class MFCStandbyEndEvent extends Event {
 
@@ -176,7 +181,7 @@ public class Standby {
         }
 
         public Map<String, UUID> getPlayers() {
-            return players;
+            return new HashMap<>(players);
         }
 
         public Standby getStanby(){

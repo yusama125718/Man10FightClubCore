@@ -46,8 +46,9 @@ new Bet(Map<UUID, String> players, String systemName, String displayName, String
 ### void SystemBet(double price, UUID target)
 システムからターゲットにベットします。
 
-### void Payout(UUID win_player)
-勝者に払い戻しを行い、処理後にベット状況を初期化します。
+### void Payout(UUID win_player, double additional_prise)
+勝者に賞金を支払い、ベット払い戻し処理後にベット状況を初期化します。
+賞金はベット総額から指定した割合の他、additional_priseが賞金に上乗せされます。
 
 ### void cancelAll(double entry_prise)
 試合中止などで全てのベットを返金し、処理後にベット状況を初期化します。

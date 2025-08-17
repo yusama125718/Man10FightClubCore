@@ -200,7 +200,7 @@ public class Bet {
         th.start();
     }
 
-    public void Payout(UUID win_player){
+    public void Payout(UUID win_player, double additional_prise){
         Thread th = new Thread(() -> {
             float win_odds = 0F;
             for (UUID id : odds.keySet()){
@@ -228,7 +228,7 @@ public class Bet {
             for (UUID u : total_bets.keySet()){
                 total += total_bets.get(u);
             }
-            double prise = total * prise_ratio;
+            double prise = total * prise_ratio + additional_prise;
             if (!mysql.execute("INSERT INTO money_log (time, system_name, mcid, uuid, pay_amount, out_amount, note) VALUES ('" + LocalDateTime.now() + "', '" + sys_name + "', '" + players.get(win_player) + "', '" + win_player + "', 0, " + prise + ", 'Action:WinPrise, BetID:" + BetID + "')")){
                 Bukkit.broadcast(Component.text(chat_prefix + "§cDBの保存に失敗しました"));
                 return;

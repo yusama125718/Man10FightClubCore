@@ -47,6 +47,11 @@ new Standby(String systemName, String displayName, String bossBarTitle, int pric
 ### void AllCancel()
 全てのプレイヤーの登録を取り消します。
 
+### void RemovePlayer(String mcid)
+指定したプレイヤーを登録から外します。
+マッチング時にマッチングしたプレイヤー必ず外してください。
+（無料で参加登録できることになってしまいます）
+
 ## カスタムイベント
 ### MFCStandbyEndEvent
 `StartStandby` のカウントダウン終了時に発火し、募集の締め切りを通知します。
